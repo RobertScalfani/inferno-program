@@ -796,22 +796,30 @@ module Inferno
       def get_value_for_search_param(element)
         search_value = case element
                        when FHIR::Period
+                       when FHIR::DSTU2::Period
                          if element.start.present?
                            'gt' + element.start
                          else
                            'lt' + element.end
                          end
                        when FHIR::Reference
+                       when FHIR::DSTU2::Reference
                          element.reference
                        when FHIR::CodeableConcept
+                       when FHIR::DSTU2::CodeableConcept
                          resolve_element_from_path(element, 'coding.code')
                        when FHIR::Identifier
+                       when FHIR::DSTU2::Identifier
                          element.value
                        when FHIR::Coding
+                       when FHIR::DSTU2::Coding
                          element.code
                        when FHIR::HumanName
                          element.family || element.given&.first || element.text
+                       when FHIR::DSTU2::HumanName
+                         element.family&.first || element.given&.first || element.text
                        when FHIR::Address
+                       when FHIR::DSTU2::Address
                          element.text || element.city || element.state || element.postalCode || element.country
                        else
                          element
